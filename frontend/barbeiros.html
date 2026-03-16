@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escolher Barbeiro</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body class="pagina-barbeiros">
+
+<div class="overlay">
+
+<h1 class="titulo">Escolha seu Barbeiro</h1>
+
+<div class="botoes">
+
+<button onclick="agendar('Yagor')">YAGOR</button>
+
+<button onclick="agendar('João')">JOÃO</button>
+
+</div>
+
+</div>
+
+<script>
+
+function agendar(barbeiro){
+
+localStorage.setItem("barbeiro",barbeiro)
+
+window.location.href="agendamento.html"
+
+}
+
+</script>
+
+</body>
+</html>

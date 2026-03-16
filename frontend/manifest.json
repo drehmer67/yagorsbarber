@@ -1,0 +1,20 @@
+{
+  "name": "Yagor's Barber",
+  "short_name": "Yagor's barber",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff0000",
+  "icons": [
+    {
+      "src": "img/yagors.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "img/yagors.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ]
+}

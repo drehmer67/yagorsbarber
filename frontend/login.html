@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Barbearia</title>
+
+<style>
+
+body{
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+padding-top:100px;
+}
+
+h1{
+color:red;
+}
+
+input{
+padding:10px;
+margin:10px;
+width:200px;
+}
+
+button{
+padding:10px;
+background:red;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Login Barbearia</h1>
+
+<input id="usuario" placeholder="Usuário">
+
+<br>
+
+<input id="senha" type="password" placeholder="Senha">
+
+<br>
+
+<button onclick="entrar()">Entrar</button>
+
+<script>
+
+function entrar(){
+
+const usuario = document.getElementById("usuario").value
+const senha = document.getElementById("senha").value
+
+if(usuario === "admin" && senha === "1234"){
+
+localStorage.setItem("logado", "sim")
+
+window.location.href = "admin.html"
+
+}else{
+
+alert("Usuário ou senha incorretos")
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>

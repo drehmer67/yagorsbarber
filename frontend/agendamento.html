@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendar Horário</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body class="pagina-barbeiros">
+
+<div class="overlay">
+
+<h1 class="titulo">Agendar Horário</h1>
+
+<h2 id="barbeiroEscolhido"></h2>
+
+<div class="formulario">
+
+<input type="text" id="nome" placeholder="Seu nome">
+
+<input type="date" id="data">
+
+<button onclick="carregarHorarios()">VER HORÁRIOS</button>
+
+<select id="horario">
+<option>Escolha a data primeiro</option>
+</select>
+
+<input type="email" id="email" placeholder="Seu email">
+
+<button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API = window.location.origin
+
+const barbeiro = localStorage.getItem("barbeiro")
+
+document.getElementById("barbeiroEscolhido").innerText = "Barbeiro: " + barbeiro
+
+
+function carregarHorarios(){
+
+const data = document.getElementById("data").value
+
+if(!data){
+
+alert("Escolha uma data primeiro")
+return
+
+}
+
+fetch(`${API}/horarios/${barbeiro}/${data}`)
+
+.then(res => res.json())
+
+.then(horariosOcupados => {
+
+const select = document.getElementById("horario")
+
+const horarios = [
+
+"09:00",
+"10:00",
+"11:00",
+"13:00",
+"14:00",
+"15:00",
+"16:00",
+"17:00"
+
+]
+
+select.innerHTML = ""
+
+horarios.forEach(h => {
+
+const option = document.createElement("option")
+
+option.value = h
+option.text = h
+
+if(horariosOcupados.includes(h)){
+
+option.disabled = true
+option.text = h + " (ocupado)"
+
+}
+
+select.appendChild(option)
+
+})
+
+})
+
+.catch(error => {
+
+console.log("Erro ao buscar horários:", error)
+
+})
+
+}
+
+
+function confirmar(){
+
+const nome = document.getElementById("nome").value
+const data = document.getElementById("data").value
+const horario = document.getElementById("horario").value
+const email = document.getElementById("email").value
+
+fetch(`${API}/agendar`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+nome:nome,
+barbeiro:barbeiro,
+data:data,
+horario:horario,
+email:email
+
+})
+
+})
+
+.then(res => res.json())
+
+.then(() => {
+
+alert(
+"✅ Agendamento confirmado!\n\n" +
+"Barbeiro: " + barbeiro + "\n" +
+"Data: " + data + "\n" +
+"Horário: " + horario
+)
+
+})
+
+.catch(error => {
+
+console.log("Erro ao agendar:", error)
+
+})
+
+}
+
+</script>
+
+</body>
+
+</html>

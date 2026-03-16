@@ -1,0 +1,26 @@
+<h1>Agenda da Barbearia</h1>
+
+<ul id="lista"></ul>
+
+<script>
+
+async function carregar(){
+
+const resposta = await fetch("http://127.0.0.1:3000/agenda")
+
+const dados = await resposta.json()
+
+const lista = document.getElementById("lista")
+
+dados.forEach(a => {
+
+lista.innerHTML +=
+`<li>${a[1]} - ${a[3]} - ${a[4]} ${a[5]}</li>`
+
+})
+
+}
+
+carregar()
+
+</script>
