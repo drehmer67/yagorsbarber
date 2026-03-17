@@ -63,7 +63,7 @@ def agendar():
     conn.close()
 
     # ENVIO DE EMAIL
- try:
+try:
     yag = yagmail.SMTP(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASS"))
 
     yag.send(
