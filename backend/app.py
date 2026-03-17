@@ -62,6 +62,29 @@ def agendar():
     conn.commit()
     conn.close()
 
+    # ENVIO DE EMAIL (PROTEGIDO)
+    try:
+        yag = yagmail.SMTP(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASS"))
+
+        yag.send(
+            to=email,
+            subject="Agendamento confirmado - Yagor's Barber 💈",
+            contents=f"""
+Olá {nome}!
+
+Seu horário foi confirmado.
+
+Barbeiro: {barbeiro}
+Data: {data}
+Horário: {horario}
+
+Obrigado!
+"""
+        )
+    except Exception as e:
+        print("Erro ao enviar email:", e)
+
+    return jsonify({"mensagem": "Agendado com sucesso"})
     # ENVIO DE EMAIL
 try:
     yag = yagmail.SMTP(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASS"))
@@ -83,7 +106,6 @@ Obrigado!
     )
 except Exception as e:
     print("Erro ao enviar email:", e)
-    return jsonify({"mensagem": "Agendado com sucesso"})
 
 # ---------------- HORARIOS ----------------
 @app.route("/horarios/<barbeiro>/<data>")
