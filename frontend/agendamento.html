@@ -40,7 +40,7 @@
 
 <script>
 
-const API = window.location.origin
+const API = ""
 
 const barbeiro = localStorage.getItem("barbeiro")
 
@@ -116,6 +116,11 @@ const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
+
+if(!nome || !data || !horario || !email){
+    alert("Preencha todos os campos!")
+    return
+}
 
 fetch(`${API}/agendar`,{
 
