@@ -85,10 +85,6 @@ Yagor's Barber 💈
 
     return jsonify({"mensagem": "Agendado com sucesso"})
 
-@app.route("/agendar")
-def agendar_pagina():
-    return send_from_directory("../frontend", "agendamento.html")
-
 # ---------------- HORARIOS ----------------
 @app.route("/horarios/<barbeiro>/<data>")
 def horarios(barbeiro, data):
