@@ -63,6 +63,7 @@ def agendar():
     conn.close()
 
     # ENVIO DE EMAIL
+ try:
     yag = yagmail.SMTP(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASS"))
 
     yag.send(
@@ -77,12 +78,11 @@ Barbeiro: {barbeiro}
 Data: {data}
 Horário: {horario}
 
-Obrigado pela preferência!
-
-Yagor's Barber 💈
+Obrigado!
 """
     )
-
+except Exception as e:
+    print("Erro ao enviar email:", e)
     return jsonify({"mensagem": "Agendado com sucesso"})
 
 # ---------------- HORARIOS ----------------
