@@ -152,10 +152,11 @@ Barbeiro: ${barbeiro}
 Data: ${data}
 Horário: ${horario}`
 
-const telefone = "5551994781654" // coloca o número da barbearia
+const telefone = "5551994781654" // 🔥 COLOCA O NÚMERO REAL AQUI
 
 const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
+// abre o WhatsApp
 window.open(url, "_blank")
 
 })
