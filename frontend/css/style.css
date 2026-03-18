@@ -325,3 +325,8 @@ height:100vh;
     transform: rotateY(360deg);
   }
 }
+.logo-container {
+  display: flex;
+  justify-content: center; /* centraliza horizontal */
+  align-items: center;     /* centraliza vertical (se quiser) */
+}
