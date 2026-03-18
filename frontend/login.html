@@ -2,95 +2,38 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script>
-
-if(localStorage.getItem("logado") !== "true"){
-  window.location.href = "login.html"
-}
-
-</script>
 <title>Login Admin</title>
-
-<style>
-body{
-  background:black;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  font-family:Arial;
-}
-
-.box{
-  background:#111;
-  padding:30px;
-  border-radius:10px;
-  text-align:center;
-}
-
-input{
-  display:block;
-  margin:10px auto;
-  padding:10px;
-  width:200px;
-}
-
-button{
-  padding:10px 20px;
-  background:red;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-</style>
 </head>
 
 <body>
 
-<div class="box">
 <h2>Login Admin</h2>
 
 <input type="text" id="usuario" placeholder="Usuário">
 <input type="password" id="senha" placeholder="Senha">
 
 <button onclick="entrar()">Entrar</button>
-</div>
 
 <script>
-
 function entrar(){
+  const usuario = document.getElementById("usuario").value
+  const senha = document.getElementById("senha").value
 
-const usuario = document.getElementById("usuario").value
-const senha = document.getElementById("senha").value
-
-fetch("https://yagorsbarber.onrender.com/login", {
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body: JSON.stringify({usuario, senha})
-})
-.then(res => {
-  if(res.ok){
-    localStorage.setItem("logado", "true")
-    window.location.href = "admin.html"
-  } else {
-    alert("Login inválido")
-  }
-})
-
+  fetch("https://yagorsbarber.onrender.com/login", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({usuario, senha})
+  })
+  .then(res => {
+    if(res.ok){
+      localStorage.setItem("logado", "true")
+      window.location.href = "admin.html"
+    } else {
+      alert("Login inválido")
+    }
+  })
 }
-
-
 </script>
 
 </body>
 </html>
-
-<button onclick="sair()">Sair</button>
-
-<script>
-function sair(){
-  localStorage.removeItem("logado")
-  window.location.href = "login.html"
-}
-</script>
