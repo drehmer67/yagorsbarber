@@ -192,6 +192,20 @@ def index():
 def arquivos(arquivo):
     return send_from_directory(FRONTEND, arquivo)
 
+@app.route("/login", methods=["POST"])
+def login():
+
+    dados = request.json
+
+    usuario = dados.get("usuario")
+    senha = dados.get("senha")
+
+    # 🔥 define aqui o login
+    if usuario == "admin" and senha == "1234":
+        return jsonify({"status": "ok"})
+    else:
+        return jsonify({"status": "erro"}), 401
+
 @app.route("/painel")
 def painel():
   return send_from_directory(FRONTEND, "admin.html")
