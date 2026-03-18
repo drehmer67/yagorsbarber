@@ -306,12 +306,17 @@ background-position:center;
 background-repeat:no-repeat;
 height:100vh;
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden; /* 🔥 evita cortar fora da tela */
 }
 
 .logo {
-  width: 500px;
-  display: block;
-  margin: 40px auto; /* 🔥 centraliza horizontal */
+  width: 150px; /* 🔥 menor para celular */
+  max-width: 80vw; /* 🔥 nunca passa da tela */
 
   animation: girar3d 4s infinite linear;
   transform-style: preserve-3d;
@@ -325,8 +330,9 @@ height:100vh;
     transform: rotateY(360deg);
   }
 }
-.logo-container {
-  display: flex;
-  justify-content: center; /* centraliza horizontal */
-  align-items: center;     /* centraliza vertical (se quiser) */
+}
+@media (max-width: 600px) {
+  .logo {
+    width: 120px; /* 🔥 menor no celular */
+  }
 }
