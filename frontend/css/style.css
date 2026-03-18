@@ -311,7 +311,7 @@ height:100vh;
 .logo {
   width: 500px;
   display: block;
-  margin: 0 auto;
+  margin: 40px auto; /* 🔥 centraliza horizontal */
 
   animation: girar3d 4s infinite linear;
   transform-style: preserve-3d;
