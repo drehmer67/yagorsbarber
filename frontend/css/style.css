@@ -44,7 +44,7 @@ button{
   padding:15px 40px;
   font-size:20px;
   border:none;
-  background:red;
+  background:rgba(255, 0, 0, 0);
   color:white;
   cursor:pointer;
   border-radius:8px;
@@ -133,7 +133,7 @@ button:hover{
 @media (max-width: 768px){
 
   .logo{
-    width:180px;
+    width:500px;
   }
 
   .titulo{
