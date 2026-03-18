@@ -146,6 +146,18 @@ email:email
 
 .then(() => {
 
+// salva dados para próxima tela
+localStorage.setItem("agendamento", JSON.stringify({
+barbeiro,
+data,
+horario
+}))
+
+// redireciona
+window.location.href = "confirmado.html"
+
+})
+
 const mensagem = `Olá! Agendei um horário 💈
 
 Barbeiro: ${barbeiro}
@@ -159,15 +171,9 @@ const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 // abre o WhatsApp
 window.open(url, "_blank")
 
-})
-
-.catch(error => {
-
-console.log("Erro ao agendar:", error)
-
-})
-
 }
+
+
 
 </script>
 
