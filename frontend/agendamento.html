@@ -146,12 +146,17 @@ email:email
 
 .then(() => {
 
-alert(
-"✅ Agendamento confirmado!\n\n" +
-"Barbeiro: " + barbeiro + "\n" +
-"Data: " + data + "\n" +
-"Horário: " + horario
-)
+const mensagem = `Olá! Agendei um horário 💈
+
+Barbeiro: ${barbeiro}
+Data: ${data}
+Horário: ${horario}`
+
+const telefone = "5551994781654" // coloca o número da barbearia
+
+const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
+
+window.open(url, "_blank")
 
 })
 
