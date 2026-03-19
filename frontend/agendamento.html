@@ -93,63 +93,70 @@ console.log("Erro ao buscar horários:", error)
 
 }
 
-
 function confirmar(){
 
 const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
-const valor = document.getElementById("valor").value
 
 if(!nome || !data || !horario || !email){
-alert("Preencha todos os campos!")
-return
+    alert("Preencha todos os campos!")
+    return
 }
 
-fetch(`${API}/api/agendar`,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-nome,
-barbeiro,
-data,
-horario,
-email,
-valor
+fetch(`/api/agendar`, {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        nome,
+        barbeiro,
+        data,
+        horario,
+        email
+    })
 })
+
+.then(res => {
+    if(!res.ok){
+        throw new Error("Erro ao agendar")
+    }
+    return res.json()
 })
-.then(res => res.json())
+
 .then(() => {
 
-// salva dados
-localStorage.setItem("agendamento", JSON.stringify({
-barbeiro,
-data,
-horario
-}))
-
-// mensagem WhatsApp
-const mensagem = `Olá! Agendei um horário 💈
+    // 💬 mensagem Whats
+    const mensagem = `Olá! Agendei um horário 💈
 
 Barbeiro: ${barbeiro}
 Data: ${data}
 Horário: ${horario}`
 
-const telefone = "5551997861753"
+    const telefone = "5551997861753" // seu número
 
-const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
+    const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
-// abre WhatsApp
-window.open(url, "_blank")
+    // abre WhatsApp
+    window.open(url, "_blank")
 
-// redireciona
-window.location.href = "confirmado.html"
+    // salva dados
+    localStorage.setItem("agendamento", JSON.stringify({
+        barbeiro,
+        data,
+        horario
+    }))
+
+    // redireciona
+    window.location.href = "confirmado.html"
 
 })
+
 .catch(error => {
-console.log("Erro ao agendar:", error)
-alert("Erro ao agendar")
+    console.log("Erro:", error)
+    alert("Erro ao agendar. Tenta de novo.")
 })
 
 }
