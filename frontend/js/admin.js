@@ -4,6 +4,7 @@ function carregarAgenda(){
 
 const dataFiltro = document.getElementById("filtroData").value
 const barbeiroFiltro = document.getElementById("filtroBarbeiro").value
+const valor = document.getElementById("valor").value
 
 fetch(`${API}/agendamentos`)
 .then(res => res.json())
