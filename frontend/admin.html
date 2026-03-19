@@ -2,15 +2,14 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Barbearia</title>
 
 <link rel="stylesheet" href="css/admin.css">
 
+<!-- 🔐 PROTEÇÃO LOGIN -->
 <script>
-
 if(localStorage.getItem("logado") !== "true"){
   window.location.href = "login.html"
 }
@@ -20,23 +19,41 @@ if(localStorage.getItem("logado") !== "true"){
 
 <body>
 
+<div class="container">
+
 <h1>Agenda da Barbearia</h1>
+
+<!-- FILTROS -->
+<div class="filtros">
 
 <input type="date" id="filtroData">
 
 <select id="filtroBarbeiro">
-
 <option value="">Todos barbeiros</option>
 <option value="Yagor">Yagor</option>
 <option value="João">João</option>
-
 </select>
 
 <button onclick="carregarAgenda()">Buscar</button>
 
+</div>
+
+<!-- LISTA -->
 <ul id="lista"></ul>
 
+<!-- BOTÃO SAIR -->
+<button onclick="sair()" class="btn-sair">Sair</button>
+
+</div>
+
 <script src="js/admin.js"></script>
+
+<script>
+function sair(){
+  localStorage.removeItem("logado")
+  window.location.href = "login.html"
+}
+</script>
 
 </body>
 
