@@ -9,6 +9,13 @@
 
 <link rel="stylesheet" href="css/admin.css">
 
+<script>
+
+if(localStorage.getItem("logado") !== "true"){
+  window.location.href = "login.html"
+}
+</script>
+
 </head>
 
 <body>
@@ -34,9 +41,3 @@
 </body>
 
 </html>
-
-<script>
-
-if(localStorage.getItem("logado") !== "true"){
-  window.location.href = "login.html"
-}
