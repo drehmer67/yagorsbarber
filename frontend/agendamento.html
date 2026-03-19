@@ -32,9 +32,9 @@
 
 <input type="email" id="email" placeholder="Seu email">
 
-<button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
-
 <input type="number" id="valor" placeholder="Valor do corte (R$)">
+
+<button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
 
 </div>
 
@@ -42,7 +42,7 @@
 
 <script>
 
-const API = ""
+const API = window.location.origin
 
 const barbeiro = localStorage.getItem("barbeiro")
 
@@ -54,31 +54,20 @@ function carregarHorarios(){
 const data = document.getElementById("data").value
 
 if(!data){
-
 alert("Escolha uma data primeiro")
 return
-
 }
 
 fetch(`${API}/horarios/${barbeiro}/${data}`)
-
 .then(res => res.json())
-
 .then(horariosOcupados => {
 
 const select = document.getElementById("horario")
 
 const horarios = [
-
-"09:00",
-"10:00",
-"11:00",
-"13:00",
-"14:00",
-"15:00",
-"16:00",
-"17:00"
-
+"09:00","10:00","11:00",
+"13:00","14:00","15:00",
+"16:00","17:00"
 ]
 
 select.innerHTML = ""
@@ -91,10 +80,8 @@ option.value = h
 option.text = h
 
 if(horariosOcupados.includes(h)){
-
 option.disabled = true
 option.text = h + " (ocupado)"
-
 }
 
 select.appendChild(option)
@@ -102,11 +89,8 @@ select.appendChild(option)
 })
 
 })
-
 .catch(error => {
-
 console.log("Erro ao buscar horários:", error)
-
 })
 
 }
@@ -118,66 +102,61 @@ const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
+const valor = document.getElementById("valor").value
 
 if(!nome || !data || !horario || !email){
-    alert("Preencha todos os campos!")
-    return
+alert("Preencha todos os campos!")
+return
 }
 
 fetch(`${API}/api/agendar`,{
-
 method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
-
-nome:nome,
-barbeiro:barbeiro,
-data:data,
-horario:horario,
-email:email
-
+nome,
+barbeiro,
+data,
+horario,
+email,
+valor
 })
-
 })
-
 .then(res => res.json())
-
 .then(() => {
 
-// salva dados para próxima tela
+// salva dados
 localStorage.setItem("agendamento", JSON.stringify({
 barbeiro,
 data,
 horario
 }))
 
-// redireciona
-window.location.href = "confirmado.html"
-
-})
-
+// mensagem WhatsApp
 const mensagem = `Olá! Agendei um horário 💈
 
 Barbeiro: ${barbeiro}
 Data: ${data}
 Horário: ${horario}`
 
-const telefone = "5551997861753" // 🔥 COLOCA O NÚMERO REAL AQUI
+const telefone = "5551997861753"
 
 const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
-// abre o WhatsApp
+// abre WhatsApp
 window.open(url, "_blank")
 
-}
+// redireciona
+window.location.href = "confirmado.html"
 
+})
+.catch(error => {
+console.log("Erro ao agendar:", error)
+alert("Erro ao agendar")
+})
+
+}
 
 </script>
 
 </body>
-
 </html>
