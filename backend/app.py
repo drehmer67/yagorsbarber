@@ -49,7 +49,12 @@ def agendar():
         data = dados.get("data")
         horario = dados.get("horario")
         email = dados.get("email")
-        valor = dados.get("valor", 0)
+        valores = {
+    "Yagor": 30,
+    "João": 25
+}
+
+        valor = valores.get(barbeiro, 30)
 
         conn = conectar()
         cur = conn.cursor()
