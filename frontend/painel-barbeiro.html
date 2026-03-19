@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Barbeiro</title>
+
+<link rel="stylesheet" href="css/admin.css">
+
+<script>
+if(!localStorage.getItem("barbeiroLogado")){
+  window.location.href = "login-barbeiro.html"
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="titulo"></h1>
+
+<ul id="lista"></ul>
+
+<button onclick="sair()">Sair</button>
+
+</div>
+
+<script>
+
+const API = window.location.origin
+const barbeiro = localStorage.getItem("barbeiroLogado")
+
+document.getElementById("titulo").innerText = "Agenda de " + barbeiro
+
+function carregarAgenda(){
+
+fetch(`${API}/agendamentos`)
+.then(res => res.json())
+.then(dados => {
+
+const lista = document.getElementById("lista")
+lista.innerHTML = ""
+
+dados.forEach(a => {
+
+if(a.barbeiro !== barbeiro) return
+
+const item = document.createElement("li")
+
+item.innerHTML = `
+${a.data} - ${a.horario} |
+${a.nome}
+`
+
+lista.appendChild(item)
+
+})
+
+})
+
+}
+
+function sair(){
+localStorage.removeItem("barbeiroLogado")
+window.location.href = "login-barbeiro.html"
+}
+
+carregarAgenda()
+
+</script>
+
+</body>
+</html>

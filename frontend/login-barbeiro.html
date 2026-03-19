@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Barbeiro</title>
+
+<style>
+body{
+  background:black;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Arial;
+}
+
+.box{
+  background:#111;
+  padding:30px;
+  border-radius:10px;
+  text-align:center;
+}
+
+input{
+  display:block;
+  margin:10px auto;
+  padding:10px;
+  width:200px;
+}
+
+button{
+  padding:10px 20px;
+  background:red;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Login Barbeiro</h2>
+
+<input type="text" id="usuario" placeholder="Usuário">
+<input type="password" id="senha" placeholder="Senha">
+
+<button onclick="entrar()">Entrar</button>
+
+</div>
+
+<script>
+
+function entrar(){
+
+const usuario = document.getElementById("usuario").value
+const senha = document.getElementById("senha").value
+
+// LOGIN SIMPLES (pode melhorar depois)
+if(usuario === "yagor" && senha === "1234"){
+  localStorage.setItem("barbeiroLogado", "Yagor")
+  window.location.href = "painel-barbeiro.html"
+}
+else if(usuario === "joao" && senha === "1234"){
+  localStorage.setItem("barbeiroLogado", "João")
+  window.location.href = "painel-barbeiro.html"
+}
+else{
+  alert("Login inválido")
+}
+
+}
+
+</script>
+
+</body>
+</html>
