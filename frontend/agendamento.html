@@ -93,16 +93,25 @@ console.log("Erro ao buscar horários:", error)
 
 }
 
+<select id="servico">
+  <option value="">Escolha o serviço</option>
+  <option value="corte">Corte - R$30</option>
+  <option value="barba">Barba - R$20</option>
+  <option value="combo">Corte + Barba - R$45</option>
+</select>
+
+
 function confirmar(){
 
 const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
+const servico = document.getElementById("servico").value
 
-if(!nome || !data || !horario || !email){
-    alert("Preencha todos os campos!")
-    return
+if(!nome || !data || !horario || !email || !servico){
+  alert("Preencha todos os campos!")
+  return
 }
 
 fetch(`/api/agendar`, {
@@ -110,13 +119,14 @@ fetch(`/api/agendar`, {
     headers:{
         "Content-Type":"application/json"
     },
-    body:JSON.stringify({
-        nome,
-        barbeiro,
-        data,
-        horario,
-        email
-    })
+   body: JSON.stringify({
+  nome,
+  barbeiro,
+  data,
+  horario,
+  email,
+  servico
+})
 })
 
 .then(res => {
@@ -164,4 +174,4 @@ Horário: ${horario}`
 </script>
 
 </body>
-</html>
+</htm

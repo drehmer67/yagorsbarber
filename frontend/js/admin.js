@@ -27,7 +27,8 @@ item.innerHTML = `
 <strong>${a.data} - ${a.horario}</strong><br>
 👤 ${a.nome}<br>
 💈 ${a.barbeiro}<br>
-💰 R$ ${a.valor || 0}
+💈 Serviço: ${a.servico} <br>
+💰 R$ ${a.valor}
 <br><br>
 <button onclick="cancelar('${a.nome}','${a.data}','${a.horario}')">❌ Cancelar</button>
 `

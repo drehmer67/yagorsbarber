@@ -27,6 +27,7 @@ def criar_tabela():
         data TEXT,
         horario TEXT,
         email TEXT,
+        servico TEXT,
         valor REAL
     )
     """)
@@ -36,7 +37,6 @@ def criar_tabela():
 
 
 criar_tabela()
-
 
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
@@ -49,12 +49,14 @@ def agendar():
         data = dados.get("data")
         horario = dados.get("horario")
         email = dados.get("email")
+        servico = dados.get("servico")
         valores = {
-    "Yagor": 30,
-    "João": 25
+    "corte": 30,
+    "barba": 20,
+    "combo": 45
 }
 
-        valor = valores.get(barbeiro, 30)
+        valor = valores.get(servico, 0)
 
         conn = conectar()
         cur = conn.cursor()
@@ -62,7 +64,7 @@ def agendar():
         cur.execute("""
         INSERT INTO agendamentos (nome, barbeiro, data, horario, email, valor)
         VALUES (?, ?, ?, ?, ?, ?)
-        """, (nome, barbeiro, data, horario, email, valor))
+        """, (nome, barbeiro, data, horario, email, servico, valor))
 
         conn.commit()
         conn.close()
