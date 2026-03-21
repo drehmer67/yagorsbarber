@@ -32,6 +32,13 @@
 
 <input type="email" id="email" placeholder="Seu email">
 
+<select id="servico">
+  <option value="">Escolha o serviço</option>
+  <option value="corte">Corte - R$30</option>
+  <option value="barba">Barba - R$20</option>
+  <option value="combo">Corte + Barba - R$45</option>
+</select>
+
 <button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
 
 </div>
@@ -92,14 +99,6 @@ console.log("Erro ao buscar horários:", error)
 })
 
 }
-
-<select id="servico">
-  <option value="">Escolha o serviço</option>
-  <option value="corte">Corte - R$30</option>
-  <option value="barba">Barba - R$20</option>
-  <option value="combo">Corte + Barba - R$45</option>
-</select>
-
 
 function confirmar(){
 
