@@ -62,7 +62,7 @@ def agendar():
         cur = conn.cursor()
 
         cur.execute("""
-        INSERT INTO agendamentos (nome, barbeiro, data, horario, email, valor)
+        INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
         VALUES (?, ?, ?, ?, ?, ?)
         """, (nome, barbeiro, data, horario, email, servico, valor))
 
