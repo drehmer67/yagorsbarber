@@ -136,27 +136,18 @@ checkboxes.forEach(cb => {
 
   if(cb.value === "corte") total += 30
   if(cb.value === "barba") total += 20
-  if(cb.value === "sobrancelha") total += 10
+  if(cb.value === "cavanha") total += 10
+  if(cb.value === "sobrancelha") total += 5
+  if(cb.value === "combo") total += 50
+  if(cb.value === "luzes") total += 100
+  if(cb.value === "nevou") total += 130
 })
 
-if(servicos.length === 0){
-  alert("Escolha pelo menos um serviço!")
-  return
-}
-
-
-checkboxes.forEach(cb => {
-  servicos.push(cb.value)
-
-  if(cb.value === "corte") total += 30
-  if(cb.value === "barba") total += 20
-  if(cb.value === "sobrancelha") total += 10
-})
-
-if(!nome || !data || !horario || !email || !servico){
+if(!nome || !data || !horario || !email){
   alert("Preencha todos os campos!")
   return
 }
+
 if(servicos.length === 0){
   alert("Escolha pelo menos um serviço!")
   return
@@ -167,15 +158,15 @@ fetch(`/api/agendar`, {
     headers:{
         "Content-Type":"application/json"
     },
- body: JSON.stringify({
-  nome,
-  barbeiro,
-  data,
-  horario,
-  email,
-  servicos,
-  valor: total
-})
+    body: JSON.stringify({
+      nome,
+      barbeiro,
+      data,
+      horario,
+      email,
+      servicos,
+      valor: total
+    })
 })
 
 .then(res => {
@@ -187,8 +178,7 @@ fetch(`/api/agendar`, {
 
 .then(() => {
 
-    // 💬 mensagem Whats
-const mensagem = `Olá! Agendei um horário 💈
+    const mensagem = `Olá! Agendei um horário 💈
 
 Serviços: ${servicos.join(", ")}
 Total: R$ ${total}
@@ -197,21 +187,18 @@ Barbeiro: ${barbeiro}
 Data: ${data}
 Horário: ${horario}`
 
-    const telefone = "5551997861753" // seu número
+    const telefone = "5551997861753"
 
     const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
-    // abre WhatsApp
     window.open(url, "_blank")
 
-    // salva dados
     localStorage.setItem("agendamento", JSON.stringify({
         barbeiro,
         data,
         horario
     }))
 
-    // redireciona
     window.location.href = "confirmado.html"
 
 })
