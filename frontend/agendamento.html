@@ -32,16 +32,15 @@
 
 <input type="email" id="email" placeholder="Seu email">
 
-<select id="servico">
-  <option value="">Escolha o serviço</option>
-  <option value="corte">Corte - R$30</option>
-  <option value="barba">Barba - R$20</option>
-  <option value="cavanha">cavanha - R$10</option>
-  <option value="sobrancelha">sobrancelha - R$5</option>
-  <option value="combo">Corte + Barba - R$50</option>
-  <option value="luzes">luzes - R$100</option>
-  <option value="nevou">nevou + corte - R$130</option>
-</select>
+<div class="servicos">
+  <label><input type="checkbox" value="corte"> Corte - R$30</label>
+  <label><input type="checkbox" value="barba"> Barba - R$20</label>
+  <label><input type="checkbox" value="cavanha"> cavanha - R$10</label>
+  <label><input type="checkbox" value="sobrancelha"> sobrancelha - R$5</label>
+  <label><input type="checkbox" value="combo"> corte + barba - R$50</label>
+  <label><input type="checkbox" value="luzes"> luzes - R$100</label>
+  <label><input type="checkbox" value="nevou"> nevou + corte - R$130</label>
+</div>
 
 <button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
 
@@ -114,10 +113,25 @@ const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
-const servico = document.getElementById("servico").value
+const checkboxes = document.querySelectorAll('.servicos input:checked')
+
+let servicos = []
+let total = 0
+
+checkboxes.forEach(cb => {
+  servicos.push(cb.value)
+
+  if(cb.value === "corte") total += 30
+  if(cb.value === "barba") total += 20
+  if(cb.value === "sobrancelha") total += 10
+})
 
 if(!nome || !data || !horario || !email || !servico){
   alert("Preencha todos os campos!")
+  return
+}
+if(servicos.length === 0){
+  alert("Escolha pelo menos um serviço!")
   return
 }
 
@@ -126,13 +140,14 @@ fetch(`/api/agendar`, {
     headers:{
         "Content-Type":"application/json"
     },
-   body: JSON.stringify({
+  body: JSON.stringify({
   nome,
   barbeiro,
   data,
   horario,
   email,
-  servico
+  servicos,
+  valor: total
 })
 })
 
@@ -146,12 +161,14 @@ fetch(`/api/agendar`, {
 .then(() => {
 
     // 💬 mensagem Whats
-    const mensagem = `Olá! horário agendado 💈
+   const mensagem = `Olá! Agendei um horário 💈
+
+Serviços: ${servicos.join(", ")}
+Total: R$ ${total}
 
 Barbeiro: ${barbeiro}
 Data: ${data}
-Horário: ${horario}
-Servico: ${servico}`
+Horário: ${horario}`
 
     const telefone = "5551997861753" // seu número
 
