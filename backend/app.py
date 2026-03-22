@@ -4,11 +4,11 @@ import sqlite3
 import os
 import yagmail
 
-app = Flask(__name__, static_folder="../frontend")
+app = Flask(__name__, static_folder="frontend")
+
+FRONTEND = os.path.join(os.path.dirname(__file__), "frontend")
+
 CORS(app)
-
-FRONTEND = os.path.join(os.path.dirname(__file__), "../frontend")
-
 
 # ---------------- BANCO ----------------
 def conectar():
