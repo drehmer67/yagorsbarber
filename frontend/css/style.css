@@ -157,3 +157,21 @@ button:hover{
   }
 
 }
+.servicos-box {
+  width: 250px;
+  position: relative;
+}
+
+.lista-servicos {
+  display: none;
+  flex-direction: column;
+  background: #111;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.lista-servicos label {
+  margin: 5px 0;
+  cursor: pointer;
+}

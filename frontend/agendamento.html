@@ -32,14 +32,18 @@
 
 <input type="email" id="email" placeholder="Seu email">
 
-<div class="servicos">
-  <label><input type="checkbox" value="corte"> Corte - R$30</label>
-  <label><input type="checkbox" value="barba"> Barba - R$20</label>
-  <label><input type="checkbox" value="cavanha"> cavanha - R$10</label>
-  <label><input type="checkbox" value="sobrancelha"> sobrancelha - R$5</label>
-  <label><input type="checkbox" value="combo"> corte + barba - R$50</label>
-  <label><input type="checkbox" value="luzes"> luzes - R$100</label>
-  <label><input type="checkbox" value="nevou"> nevou + corte - R$130</label>
+<div class="servicos-box">
+  <button onclick="toggleServicos()">Escolher serviços</button>
+
+  <div id="listaServicos" class="lista-servicos">
+    <label><input type="checkbox" value="corte"> Corte - R$30</label>
+    <label><input type="checkbox" value="barba"> Barba - R$20</label>
+    <label><input type="checkbox" value="cavanha"> cavanha - R$10</label>
+    <label><input type="checkbox" value="sobrancelha"> sobrancelha - R$5</label>
+    <label><input type="checkbox" value="combo"> corte + barba - R$50</label>
+    <label><input type="checkbox" value="luzes"> luzes - R$100</label>
+    <label><input type="checkbox" value="nevou"> nevou + corte - R$130</label>
+  </div>
 </div>
 
 <button onclick="confirmar()">CONFIRMAR AGENDAMENTO</button>
@@ -49,7 +53,15 @@
 </div>
 
 <script>
+function toggleServicos(){
+  const lista = document.getElementById("listaServicos")
 
+  if(lista.style.display === "flex"){
+    lista.style.display = "none"
+  } else {
+    lista.style.display = "flex"
+  }
+}
 const API = window.location.origin
 
 const barbeiro = localStorage.getItem("barbeiro")
@@ -113,10 +125,25 @@ const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
 const email = document.getElementById("email").value
-const checkboxes = document.querySelectorAll('.servicos input:checked')
+
+const checkboxes = document.querySelectorAll('#listaServicos input:checked')
 
 let servicos = []
 let total = 0
+
+checkboxes.forEach(cb => {
+  servicos.push(cb.value)
+
+  if(cb.value === "corte") total += 30
+  if(cb.value === "barba") total += 20
+  if(cb.value === "sobrancelha") total += 10
+})
+
+if(servicos.length === 0){
+  alert("Escolha pelo menos um serviço!")
+  return
+}
+
 
 checkboxes.forEach(cb => {
   servicos.push(cb.value)
@@ -140,7 +167,7 @@ fetch(`/api/agendar`, {
     headers:{
         "Content-Type":"application/json"
     },
-  body: JSON.stringify({
+ body: JSON.stringify({
   nome,
   barbeiro,
   data,
