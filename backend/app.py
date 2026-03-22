@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import sqlite3
+import psycopg2
 import os
 import yagmail
 
@@ -9,34 +9,9 @@ CORS(app)
 
 FRONTEND = os.path.join(os.path.dirname(__file__), "../frontend")
 
-
-# ---------------- BANCO ----------------
+# ---------------- BANCO (POSTGRES) ----------------
 def conectar():
-    return sqlite3.connect("barbearia.db")
-
-
-def criar_tabela():
-    conn = conectar()
-    cur = conn.cursor()
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS agendamentos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT,
-        barbeiro TEXT,
-        data TEXT,
-        horario TEXT,
-        email TEXT,
-        servico TEXT,
-        valor REAL
-    )
-    """)
-
-    conn.commit()
-    conn.close()
-
-
-criar_tabela()
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
@@ -50,11 +25,12 @@ def agendar():
         horario = dados.get("horario")
         email = dados.get("email")
         servico = dados.get("servico")
+
         valores = {
-    "corte": 30,
-    "barba": 20,
-    "combo": 45
-}
+            "corte": 30,
+            "barba": 20,
+            "combo": 45
+        }
 
         valor = valores.get(servico, 0)
 
@@ -63,7 +39,7 @@ def agendar():
 
         cur.execute("""
         INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (nome, barbeiro, data, horario, email, servico, valor))
 
         conn.commit()
@@ -110,7 +86,7 @@ def horarios(barbeiro, data):
 
     cur.execute("""
     SELECT horario FROM agendamentos
-    WHERE barbeiro=? AND data=?
+    WHERE barbeiro=%s AND data=%s
     """, (barbeiro, data))
 
     resultados = cur.fetchall()
@@ -164,7 +140,7 @@ def cancelar():
 
     cur.execute("""
     DELETE FROM agendamentos
-    WHERE nome=? AND data=? AND horario=?
+    WHERE nome=%s AND data=%s AND horario=%s
     """, (nome, data, horario))
 
     conn.commit()
