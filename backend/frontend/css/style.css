@@ -16,11 +16,12 @@ body{
 /* 🏠 HOME (SEM IMAGEM - PRETO TOTAL) */
 .bg-home{
   background:black;
+  background-image:url("../img/yagor-home.jpg");
 }
 
 /* 💈 BARBEIROS */
 .bg-barbeiros{
-  background-image:url("../img/yagor-1.jpg");
+  background-image:url("../img/yagor-2.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -28,7 +29,7 @@ body{
 
 /* 📅 AGENDAMENTO */
 .bg-agendamento{
-  background-image:url("../img/yagor-2.jpg");
+  background-image:url("../img/yagor-3.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
