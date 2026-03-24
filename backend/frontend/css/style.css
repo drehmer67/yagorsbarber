@@ -196,3 +196,9 @@ button:hover{
   display:flex;
   gap:20px;
 }
+
+.pagina-barbeiros{
+  color:white;
+  text-align:center;
+  padding-top:50px;
+}
