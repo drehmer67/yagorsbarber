@@ -210,8 +210,8 @@ button:hover{
   .card{
     width:80%;
   }
-
 }
+
 .bg-girando{
   position:fixed;
   top:0;
@@ -225,7 +225,7 @@ button:hover{
 
   animation:girarFundo 20s linear infinite;
 
-  z-index:0;
+  z-index:-1; /* 🔥 ESSENCIAL */
 }
 
 /* faz o overlay ficar por cima */
