@@ -11,17 +11,17 @@ body{
   background-repeat:no-repeat;
 }
 
-  /* FUNDOS POR PÁGINA */
+/* ================= FUNDOS ================= */
 
-/* 🏠 HOME (SEM IMAGEM - PRETO TOTAL) */
+/* 🏠 HOME (PRETO TOTAL) */
 .bg-home{
-  background:black;
-  background-image:url("../img/yagor-home.jpg");
+  background:black !important;
+  background-image:none !important;
 }
 
 /* 💈 BARBEIROS */
 .bg-barbeiros{
-  background-image:url("../img/yagor-2.jpg");
+  background-image:url("../img/yagor-1.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -29,7 +29,7 @@ body{
 
 /* 📅 AGENDAMENTO */
 .bg-agendamento{
-  background-image:url("../img/yagor-3.jpg");
+  background-image:url("../img/yagor-2.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -43,7 +43,7 @@ body{
   background-repeat:no-repeat;
 }
 
-/* OVERLAY */
+/* ================= OVERLAY ================= */
 .overlay{
   height:100vh;
   background:rgba(0, 0, 0, 0.7);
@@ -54,7 +54,7 @@ body{
   align-items:center;
 }
 
-/* LOGO */
+/* ================= LOGO ================= */
 .logo{
   width:300px;
   max-width:80vw;
@@ -64,13 +64,12 @@ body{
   transform-style:preserve-3d;
 }
 
-/* ANIMAÇÃO 3D */
 @keyframes girar3d{
   0%{transform:rotateY(0deg);}
   100%{transform:rotateY(360deg);}
 }
 
-/* BOTÕES */
+/* ================= BOTÕES ================= */
 button{
   padding:15px 40px;
   font-size:20px;
@@ -87,13 +86,30 @@ button:hover{
   background:#ff2b2b;
 }
 
-/* TITULO */
+/* ================= TITULO ================= */
 .titulo{
   font-size:40px;
   margin-bottom:40px;
 }
 
-/* CARDS */
+/* ================= BARBEIROS ================= */
+.pagina-barbeiros{
+  text-align:center;
+  padding-top:50px;
+}
+
+.botoes{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.botoes button{
+  width:200px;
+}
+
+/* ================= CARDS (caso usar depois) ================= */
 .barbeiros{
   display:flex;
   justify-content:center;
@@ -122,7 +138,7 @@ button:hover{
   padding:10px 25px;
 }
 
-/* FORMULÁRIO */
+/* ================= FORMULÁRIO ================= */
 .formulario{
   display:flex;
   flex-direction:column;
@@ -143,27 +159,27 @@ button:hover{
   font-size:18px;
 }
 
-/* SERVIÇOS (dropdown) */
-.servicos-box {
-  width: 250px;
-  position: relative;
+/* ================= SERVIÇOS ================= */
+.servicos-box{
+  width:250px;
+  position:relative;
 }
 
-.lista-servicos {
-  display: none;
-  flex-direction: column;
-  background: #111;
-  border-radius: 6px;
-  padding: 10px;
-  margin-top: 5px;
+.lista-servicos{
+  display:none;
+  flex-direction:column;
+  background:#111;
+  border-radius:6px;
+  padding:10px;
+  margin-top:5px;
 }
 
-.lista-servicos label {
-  margin: 5px 0;
-  cursor: pointer;
+.lista-servicos label{
+  margin:5px 0;
+  cursor:pointer;
 }
 
-/* 📱 RESPONSIVO */
+/* ================= RESPONSIVO ================= */
 @media (max-width: 768px){
 
   .logo{
@@ -181,6 +197,11 @@ button:hover{
     margin:10px;
   }
 
+  .botoes{
+    flex-direction:column;
+    align-items:center;
+  }
+
   .barbeiros{
     flex-direction:column;
     align-items:center;
@@ -190,15 +211,4 @@ button:hover{
     width:80%;
   }
 
-}
-
-.botoes{
-  display:flex;
-  gap:20px;
-}
-
-.pagina-barbeiros{
-  color:white;
-  text-align:center;
-  padding-top:50px;
 }
