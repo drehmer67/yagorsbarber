@@ -212,3 +212,31 @@ button:hover{
   }
 
 }
+.bg-girando{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background-image:url("../img/yagor-1.jpg");
+  background-size:cover;
+  background-position:center;
+
+  animation:girarFundo 20s linear infinite;
+
+  z-index:0;
+}
+
+/* faz o overlay ficar por cima */
+.overlay{
+  position:relative;
+  z-index:1;
+}
+
+/* animação suave */
+@keyframes girarFundo{
+  0%{transform:scale(1) rotate(0deg);}
+  50%{transform:scale(1.1) rotate(180deg);}
+  100%{transform:scale(1) rotate(360deg);}
+}
