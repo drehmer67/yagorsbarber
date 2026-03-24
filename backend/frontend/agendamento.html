@@ -10,7 +10,8 @@
 
 </head>
 
-<body class="pagina-barbeiros">
+<!-- 🔥 CORRETO -->
+<body class="bg-agendamento">
 
 <div class="overlay">
 
@@ -38,11 +39,11 @@
   <div id="listaServicos" class="lista-servicos">
     <label><input type="checkbox" value="corte"> Corte - R$30</label>
     <label><input type="checkbox" value="barba"> Barba - R$20</label>
-    <label><input type="checkbox" value="cavanha"> cavanha - R$10</label>
-    <label><input type="checkbox" value="sobrancelha"> sobrancelha - R$5</label>
-    <label><input type="checkbox" value="combo"> corte + barba - R$50</label>
-    <label><input type="checkbox" value="luzes"> luzes - R$100</label>
-    <label><input type="checkbox" value="nevou"> nevou + corte - R$130</label>
+    <label><input type="checkbox" value="cavanha"> Cavanha - R$10</label>
+    <label><input type="checkbox" value="sobrancelha"> Sobrancelha - R$5</label>
+    <label><input type="checkbox" value="combo"> Corte + Barba - R$50</label>
+    <label><input type="checkbox" value="luzes"> Luzes - R$100</label>
+    <label><input type="checkbox" value="nevou"> Nevou + Corte - R$130</label>
   </div>
 </div>
 
@@ -53,6 +54,7 @@
 </div>
 
 <script>
+
 function toggleServicos(){
   const lista = document.getElementById("listaServicos")
 
@@ -62,8 +64,8 @@ function toggleServicos(){
     lista.style.display = "flex"
   }
 }
-const API = window.location.origin
 
+const API = window.location.origin
 const barbeiro = localStorage.getItem("barbeiro")
 
 document.getElementById("barbeiroEscolhido").innerText = "Barbeiro: " + barbeiro
@@ -91,7 +93,7 @@ const horarios = [
 "14:30","15:00","15:30",
 "16:00","16:30","17:00",
 "17:30","18:00","18:30",
-"19:00","19:30","20:00",
+"19:00","19:30","20:00"
 ]
 
 select.innerHTML = ""
@@ -178,7 +180,7 @@ fetch(`/api/agendar`, {
 
 .then(() => {
 
-    const mensagem = `Olá! Agendei um horário 💈
+const mensagem = `Olá! Agendei um horário 💈
 
 Serviços: ${servicos.join(", ")}
 Total: R$ ${total}
@@ -187,19 +189,19 @@ Barbeiro: ${barbeiro}
 Data: ${data}
 Horário: ${horario}`
 
-    const telefone = "5551997861753"
+const telefone = "5551997861753"
 
-    const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
+const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
-    window.open(url, "_blank")
+window.open(url, "_blank")
 
-    localStorage.setItem("agendamento", JSON.stringify({
-        barbeiro,
-        data,
-        horario
-    }))
+localStorage.setItem("agendamento", JSON.stringify({
+    barbeiro,
+    data,
+    horario
+}))
 
-    window.location.href = "confirmado.html"
+window.location.href = "confirmado.html"
 
 })
 

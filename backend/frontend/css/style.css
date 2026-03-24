@@ -4,12 +4,28 @@ body{
   padding:0;
   height:100vh;
   font-family:Arial;
-  background:black;
+  color:white;
 
-  background-image:url("../img/yagor.jpg");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
+}
+
+/* BACKGROUNDS POR PÁGINA */
+.bg-home{
+  background-image:url("../img/yagor.jpg");
+}
+
+.bg-agendamento{
+  background-image:url("../img/yagor-dog.jpg");
+}
+
+.bg-confirmado{
+  background-image:url("../img/yagor completa.jpg");
+}
+
+.bg-admin{
+  background-image:url("../img/yagor.jpg");
 }
 
 /* OVERLAY */
@@ -44,7 +60,7 @@ button{
   padding:15px 40px;
   font-size:20px;
   border:none;
-  background:rgb(255, 0, 0);
+  background:red;
   color:white;
   cursor:pointer;
   border-radius:8px;
@@ -56,23 +72,10 @@ button:hover{
   background:#ff2b2b;
 }
 
-/* PAGINA BARBEIROS */
-.pagina-barbeiros{
-  background:black;
-  color:white;
-  text-align:center;
-  padding-top:50px;
-
-  background-image:url("../img/yagor-dog.jpg");
-  background-size:cover;
-  background-position:center;
-}
-
 /* TITULO */
 .titulo{
   font-size:40px;
   margin-bottom:40px;
-  color:white;
 }
 
 /* CARDS */
@@ -93,10 +96,6 @@ button:hover{
 .card img{
   width:100%;
   border-radius:10px;
-}
-
-.card h2{
-  margin-top:10px;
 }
 
 .card p{
@@ -129,11 +128,31 @@ button:hover{
   font-size:18px;
 }
 
+/* SERVIÇOS (dropdown) */
+.servicos-box {
+  width: 250px;
+  position: relative;
+}
+
+.lista-servicos {
+  display: none;
+  flex-direction: column;
+  background: #111;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.lista-servicos label {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
 /* 📱 RESPONSIVO */
 @media (max-width: 768px){
 
   .logo{
-    width:500px;
+    width:200px;
   }
 
   .titulo{
@@ -156,22 +175,4 @@ button:hover{
     width:80%;
   }
 
-}
-.servicos-box {
-  width: 250px;
-  position: relative;
-}
-
-.lista-servicos {
-  display: none;
-  flex-direction: column;
-  background: #111;
-  border-radius: 6px;
-  padding: 10px;
-  margin-top: 5px;
-}
-
-.lista-servicos label {
-  margin: 5px 0;
-  cursor: pointer;
 }

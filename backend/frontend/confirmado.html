@@ -5,18 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento Confirmado</title>
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#0f0f0f;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+<link rel="stylesheet" href="css/style.css">
 
+<style>
 .box{
   background:#1c1c1c;
   padding:30px;
@@ -39,11 +30,14 @@ h1{
   border-radius:8px;
   font-weight:bold;
 }
-
 </style>
+
 </head>
 
-<body>
+<!-- 🔥 FUNDO APLICADO -->
+<body class="bg-confirmado">
+
+<div class="overlay">
 
 <div class="box">
 
@@ -54,6 +48,8 @@ h1{
 <a id="whats" class="btn" target="_blank">
 💬 Falar no WhatsApp
 </a>
+
+</div>
 
 </div>
 
@@ -73,7 +69,7 @@ Barbeiro: ${dados.barbeiro}
 Data: ${dados.data}
 Horário: ${dados.horario}`
 
-const telefone = "5551999999999" // 🔥 SEU NÚMERO
+const telefone = "5551999999999" // 🔥 COLOCA TEU NÚMERO REAL
 
 const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 

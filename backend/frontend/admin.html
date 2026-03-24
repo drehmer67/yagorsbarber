@@ -7,6 +7,7 @@
 <title>Painel Barbearia</title>
 
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/style.css"> <!-- 🔥 IMPORTANTE -->
 
 <!-- 🔐 PROTEÇÃO LOGIN -->
 <script>
@@ -17,7 +18,10 @@ if(localStorage.getItem("logado") !== "true"){
 
 </head>
 
-<body>
+<!-- 🔥 AQUI O FUNDO -->
+<body class="bg-admin">
+
+<div class="overlay">
 
 <div class="container">
 
@@ -43,6 +47,8 @@ if(localStorage.getItem("logado") !== "true"){
 
 <!-- BOTÃO SAIR -->
 <button onclick="sair()" class="btn-sair">Sair</button>
+
+</div>
 
 </div>
 
