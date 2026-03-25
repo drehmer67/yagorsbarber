@@ -12,7 +12,10 @@ CORS(app)
 
 # ---------------- BANCO ----------------
 def conectar():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    return psycopg2.connect(
+        os.getenv("DATABASE_URL"),
+        sslmode="require"
+    )
 
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
