@@ -6,13 +6,11 @@ import yagmail
 from urllib.parse import urlparse
 
 app = Flask(__name__, static_folder="frontend")
+CORS(app)
 
 FRONTEND = os.path.join(os.path.dirname(__file__), "frontend")
 
-CORS(app)
-
 # ---------------- BANCO ----------------
-
 def conectar():
     url = urlparse(os.getenv("DATABASE_URL"))
 
@@ -39,15 +37,26 @@ def agendar():
         servicos = dados.get("servicos") or []
         valor = dados.get("valor")
 
+        # 🔥 GARANTIR QUE É LISTA
+        if not isinstance(servicos, list):
+            servicos = []
+
+        servicos_str = ", ".join(servicos)
+
+        # 🔥 VALIDAÇÃO (evita erro 500)
+        if not nome or not barbeiro or not data or not horario or not email:
+            return jsonify({"erro": "Dados incompletos"}), 400
+
         conn = conectar()
         cur = conn.cursor()
 
         cur.execute("""
         INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (nome, barbeiro, data, horario, email, ", ".join(servicos), valor))
+        """, (nome, barbeiro, data, horario, email, servicos_str, valor))
 
         conn.commit()
+        cur.close()
         conn.close()
 
         # -------- EMAIL --------
@@ -68,18 +77,19 @@ Seu horário foi confirmado.
 Barbeiro: {barbeiro}
 Data: {data}
 Horário: {horario}
+Serviços: {servicos_str}
 Valor: R$ {valor}
 
 Obrigado pela preferência!
 """
             )
         except Exception as e:
-            print("Erro ao enviar email:", e)
+            print("ERRO EMAIL:", e)
 
         return jsonify({"mensagem": "Agendado com sucesso"})
 
     except Exception as e:
-        print("ERRO:", e)
+        print("ERRO AGENDAR:", e)
         return jsonify({"erro": "Erro ao agendar"}), 500
 
 
@@ -96,6 +106,8 @@ def horarios(barbeiro, data):
         """, (barbeiro, data))
 
         resultados = cur.fetchall()
+
+        cur.close()
         conn.close()
 
         horarios = [r[0] for r in resultados]
@@ -106,56 +118,71 @@ def horarios(barbeiro, data):
         print("ERRO HORARIOS:", e)
         return jsonify([])
 
+
 # ---------------- LISTAR ----------------
 @app.route("/agendamentos")
 def listar_agendamentos():
-    conn = conectar()
-    cur = conn.cursor()
+    try:
+        conn = conectar()
+        cur = conn.cursor()
 
-    cur.execute("""
-    SELECT nome, barbeiro, data, horario, valor
-    FROM agendamentos
-    ORDER BY data, horario
-    """)
+        cur.execute("""
+        SELECT nome, barbeiro, data, horario, valor
+        FROM agendamentos
+        ORDER BY data, horario
+        """)
 
-    dados = cur.fetchall()
-    conn.close()
+        dados = cur.fetchall()
 
-    lista = []
+        cur.close()
+        conn.close()
 
-    for d in dados:
-        lista.append({
-            "nome": d[0],
-            "barbeiro": d[1],
-            "data": d[2],
-            "horario": d[3],
-            "valor": d[4]
-        })
+        lista = []
 
-    return jsonify(lista)
+        for d in dados:
+            lista.append({
+                "nome": d[0],
+                "barbeiro": d[1],
+                "data": d[2],
+                "horario": d[3],
+                "valor": d[4]
+            })
+
+        return jsonify(lista)
+
+    except Exception as e:
+        print("ERRO LISTAR:", e)
+        return jsonify([])
 
 
 # ---------------- CANCELAR ----------------
 @app.route("/cancelar", methods=["POST"])
 def cancelar():
-    dados = request.json
+    try:
+        dados = request.json
 
-    nome = dados.get("nome")
-    data = dados.get("data")
-    horario = dados.get("horario")
+        nome = dados.get("nome")
+        data = dados.get("data")
+        horario = dados.get("horario")
 
-    conn = conectar()
-    cur = conn.cursor()
+        conn = conectar()
+        cur = conn.cursor()
 
-    cur.execute("""
-    DELETE FROM agendamentos
-    WHERE nome=%s AND data=%s AND horario=%s
-    """, (nome, data, horario))
+        cur.execute("""
+        DELETE FROM agendamentos
+        WHERE nome=%s AND data=%s AND horario=%s
+        """, (nome, data, horario))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
 
-    return jsonify({"mensagem": "Agendamento cancelado"})
+        cur.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Agendamento cancelado"})
+
+    except Exception as e:
+        print("ERRO CANCELAR:", e)
+        return jsonify({"erro": "Erro ao cancelar"}), 500
 
 
 # ---------------- LOGIN ADMIN ----------------
@@ -163,10 +190,7 @@ def cancelar():
 def login():
     dados = request.json
 
-    usuario = dados.get("usuario")
-    senha = dados.get("senha")
-
-    if usuario == "admin" and senha == "1234":
+    if dados.get("usuario") == "admin" and dados.get("senha") == "1234":
         return jsonify({"status": "ok"})
     else:
         return jsonify({"status": "erro"}), 401
