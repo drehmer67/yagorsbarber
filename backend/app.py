@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import sqlite3
+import psycopg2
 import os
 import yagmail
 
@@ -12,7 +12,7 @@ CORS(app)
 
 # ---------------- BANCO ----------------
 def conectar():
-    return sqlite3.connect("barbearia.db")
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 
 
 def criar_tabela():
