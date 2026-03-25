@@ -36,8 +36,6 @@ def criar_tabela():
     conn.close()
 
 
-criar_tabela()
-
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
 def agendar():
@@ -57,7 +55,7 @@ def agendar():
 
         cur.execute("""
         INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (nome, barbeiro, data, horario, email, ", ".join(servicos), valor))
 
         conn.commit()
@@ -104,7 +102,7 @@ def horarios(barbeiro, data):
 
     cur.execute("""
     SELECT horario FROM agendamentos
-    WHERE barbeiro=? AND data=?
+    WHERE barbeiro=%s AND data=%s
     """, (barbeiro, data))
 
     resultados = cur.fetchall()
