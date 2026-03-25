@@ -3,6 +3,7 @@ from flask_cors import CORS
 import psycopg2
 import os
 import yagmail
+from urllib.parse import urlparse
 
 app = Flask(__name__, static_folder="frontend")
 
@@ -11,9 +12,16 @@ FRONTEND = os.path.join(os.path.dirname(__file__), "frontend")
 CORS(app)
 
 # ---------------- BANCO ----------------
+
 def conectar():
+    url = urlparse(os.getenv("DATABASE_URL"))
+
     return psycopg2.connect(
-        os.getenv("DATABASE_URL"),
+        dbname=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port,
         sslmode="require"
     )
 
