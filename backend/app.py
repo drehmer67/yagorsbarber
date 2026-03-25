@@ -14,28 +14,6 @@ CORS(app)
 def conectar():
     return psycopg2.connect(os.getenv("DATABASE_URL"))
 
-
-def criar_tabela():
-    conn = conectar()
-    cur = conn.cursor()
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS agendamentos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT,
-        barbeiro TEXT,
-        data TEXT,
-        horario TEXT,
-        email TEXT,
-        servico TEXT,
-        valor REAL
-    )
-    """)
-
-    conn.commit()
-    conn.close()
-
-
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
 def agendar():
@@ -97,21 +75,25 @@ Obrigado pela preferência!
 # ---------------- HORARIOS ----------------
 @app.route("/horarios/<barbeiro>/<data>")
 def horarios(barbeiro, data):
-    conn = conectar()
-    cur = conn.cursor()
+    try:
+        conn = conectar()
+        cur = conn.cursor()
 
-    cur.execute("""
-    SELECT horario FROM agendamentos
-    WHERE barbeiro=%s AND data=%s
-    """, (barbeiro, data))
+        cur.execute("""
+        SELECT horario FROM agendamentos
+        WHERE barbeiro=%s AND data=%s
+        """, (barbeiro, data))
 
-    resultados = cur.fetchall()
-    conn.close()
+        resultados = cur.fetchall()
+        conn.close()
 
-    horarios = [r[0] for r in resultados]
+        horarios = [r[0] for r in resultados]
 
-    return jsonify(horarios)
+        return jsonify(horarios)
 
+    except Exception as e:
+        print("ERRO HORARIOS:", e)
+        return jsonify([])
 
 # ---------------- LISTAR ----------------
 @app.route("/agendamentos")
