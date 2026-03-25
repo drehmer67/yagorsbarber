@@ -47,7 +47,7 @@ def agendar():
         data = dados.get("data")
         horario = dados.get("horario")
         email = dados.get("email")
-        servicos = dados.get("servicos")
+        servicos = dados.get("servicos") or []
         valor = dados.get("valor")
 
         conn = conectar()
@@ -156,7 +156,7 @@ def cancelar():
 
     cur.execute("""
     DELETE FROM agendamentos
-    WHERE nome=? AND data=? AND horario=?
+    WHERE nome=%s AND data=%s AND horario=%s
     """, (nome, data, horario))
 
     conn.commit()
