@@ -12,16 +12,11 @@ FRONTEND = os.path.join(os.path.dirname(__file__), "frontend")
 
 # ---------------- BANCO ----------------
 def conectar():
-    url = urlparse(os.getenv("DATABASE_URL"))
-
     return psycopg2.connect(
-        dbname=url.path[1:],
-        user=url.username,
-        password=url.password,
-        host=url.hostname,
-        port=url.port,
+        os.getenv("DATABASE_URL"),
         sslmode="require"
     )
+
 # ---------------- AGENDAR ----------------
 @app.route("/api/agendar", methods=["POST"])
 def agendar():
