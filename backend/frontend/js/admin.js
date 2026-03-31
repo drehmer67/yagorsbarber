@@ -2,71 +2,56 @@ const API = window.location.origin
 
 function carregarAgenda(){
 
-const dataFiltro = document.getElementById("filtroData").value
-const barbeiroFiltro = document.getElementById("filtroBarbeiro").value
+const data = document.getElementById("filtroData").value
+const barbeiro = document.getElementById("filtroBarbeiro").value
 
 fetch(`${API}/agendamentos`)
 .then(res => res.json())
-.then(dados => {
+.then(lista => {
 
-const lista = document.getElementById("lista")
-lista.innerHTML = ""
+const container = document.getElementById("lista")
+container.innerHTML = ""
 
-let total = 0
+lista
+.filter(a => !data || a.data === data)
+.filter(a => !barbeiro || a.barbeiro === barbeiro)
+.forEach(a => {
 
-dados.forEach(a => {
-
-if(dataFiltro && a.data != dataFiltro) return
-if(barbeiroFiltro && a.barbeiro != barbeiroFiltro) return
-
-total += Number(a.valor || 0)
-
-const item = document.createElement("li")
+const item = document.createElement("div")
+item.className = "card-agendamento"
 
 item.innerHTML = `
-<strong>${a.data} - ${a.horario}</strong><br>
-👤 ${a.nome}<br>
-💈 ${a.barbeiro}<br>
-💈 Serviço: ${a.servico} <br>
-💰 R$ ${a.valor}
-<br><br>
-<button onclick="cancelar('${a.nome}','${a.data}','${a.horario}')">❌ Cancelar</button>
+<h3>${a.nome}</h3>
+<p>💈 ${a.barbeiro}</p>
+<p>📅 ${a.data}</p>
+<p>⏰ ${a.horario}</p>
+<p>💰 R$ ${a.valor}</p>
+
+<button onclick="cancelar('${a.nome}','${a.data}','${a.horario}')">
+❌ Cancelar
+</button>
 `
 
-lista.appendChild(item)
+container.appendChild(item)
 
 })
 
-/* TOTAL */
-const totalDiv = document.createElement("h2")
-totalDiv.innerText = "💰 Total: R$ " + total
-
-lista.appendChild(totalDiv)
-
 })
-.catch(error => {
-console.log("Erro ao carregar agenda:", error)
-})
-
 }
-
 
 function cancelar(nome, data, horario){
 
-if(!confirm("Tem certeza que deseja cancelar?")) return
+if(!confirm("Cancelar agendamento?")) return
 
 fetch(`${API}/cancelar`,{
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({nome, data, horario})
+headers:{ "Content-Type":"application/json" },
+body: JSON.stringify({ nome, data, horario })
 })
 .then(() => {
-alert("Agendamento cancelado")
+alert("Cancelado!")
 carregarAgenda()
 })
-
 }
 
-
-/* CARREGA AUTOMÁTICO */
-carregarAgenda()
+window.onload = carregarAgenda

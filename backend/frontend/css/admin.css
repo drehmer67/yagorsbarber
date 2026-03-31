@@ -1,35 +1,24 @@
 body{
   margin:0;
-  padding:0;
   font-family:Arial;
-  background:#0a0a0a;
+  background:#111;
   color:white;
-
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  min-height:100vh;
 }
 
-/* CONTAINER CENTRAL */
 .container{
-  width:100%;
-  max-width:700px;
-  margin-top:50px;
+  padding:20px;
+  max-width:800px;
+  margin:auto;
+}
+
+h1{
   text-align:center;
 }
 
-/* TÍTULO */
-h1{
-  font-size:32px;
-  margin-bottom:30px;
-}
-
-/* FILTROS */
 .filtros{
   display:flex;
-  justify-content:center;
   gap:10px;
+  margin-bottom:20px;
   flex-wrap:wrap;
 }
 
@@ -37,43 +26,37 @@ input, select, button{
   padding:10px;
   border:none;
   border-radius:6px;
-  font-size:14px;
 }
 
 button{
   background:red;
   color:white;
   cursor:pointer;
-  transition:0.3s;
 }
 
-button:hover{
-  background:#ff2b2b;
-  transform:scale(1.05);
+.lista{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
 }
 
-/* LISTA */
-ul{
-  list-style:none;
-  padding:0;
-  margin-top:30px;
-}
-
-li{
-  background:#111;
+.card-agendamento{
+  background:#1c1c1c;
   padding:15px;
-  margin:10px 0;
-  border-radius:8px;
+  border-radius:10px;
+}
 
+.card-agendamento h3{
+  margin:0;
+}
+
+.card-agendamento button{
+  margin-top:10px;
+  background:#ff4444;
+}
+
+.acoes{
+  margin-top:20px;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-/* BOTÃO CANCELAR */
-li button{
-  background:#ff2b2b;
-  padding:5px 10px;
-  font-size:12px;
 }

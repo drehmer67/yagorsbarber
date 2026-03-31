@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Barbearia</title>
 
 <link rel="stylesheet" href="css/admin.css">
-<link rel="stylesheet" href="css/style.css"> <!-- 🔥 IMPORTANTE -->
 
-<!-- 🔐 PROTEÇÃO LOGIN -->
 <script>
 if(localStorage.getItem("logado") !== "true"){
   window.location.href = "login.html"
@@ -18,14 +15,11 @@ if(localStorage.getItem("logado") !== "true"){
 
 </head>
 
-<!-- 🔥 AQUI O FUNDO -->
-<body class="bg-admin">
-
-<div class="overlay">
+<body>
 
 <div class="container">
 
-<h1>Agenda da Barbearia</h1>
+<h1>📋 Agenda da Barbearia</h1>
 
 <!-- FILTROS -->
 <div class="filtros">
@@ -43,11 +37,12 @@ if(localStorage.getItem("logado") !== "true"){
 </div>
 
 <!-- LISTA -->
-<ul id="lista"></ul>
+<div id="lista" class="lista"></div>
 
-<!-- BOTÃO SAIR -->
-<button onclick="sair()" class="btn-sair">Sair</button>
-
+<!-- BOTÕES -->
+<div class="acoes">
+<button onclick="carregarAgenda()">🔄 Atualizar</button>
+<button onclick="sair()">🚪 Sair</button>
 </div>
 
 </div>
@@ -62,5 +57,4 @@ function sair(){
 </script>
 
 </body>
-
 </html>
