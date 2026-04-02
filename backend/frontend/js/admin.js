@@ -30,7 +30,7 @@ Lembrando do seu horário:
 Barbearia Yagors Barber`
 
 // 📞 telefone corrigido
-const telefone = a.telefone ? "55" + a.telefone : "5551999999999"
+const telefone = a.telefone ? "55" + a.telefone : "5551997861753"
 
 // 🔗 link whatsapp
 const urlWhats = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
