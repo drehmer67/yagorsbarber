@@ -27,7 +27,7 @@ def agendar():
         barbeiro = dados.get("barbeiro")
         data = dados.get("data")
         horario = dados.get("horario")
-        email = dados.get("email")
+        telefone = dados.get("telefone")
         servicos = dados.get("servicos") or []
         valor = dados.get("valor")
 
@@ -36,13 +36,13 @@ def agendar():
 
         servicos_str = ", ".join(servicos)
 
-        if not nome or not barbeiro or not data or not horario or not email:
+        if not nome or not barbeiro or not data or not horario or not telefone:
             return jsonify({"erro": "Dados incompletos"}), 400
 
         conn = conectar()
         cur = conn.cursor()
 
-        # 🚫 EVITA HORÁRIO DUPLICADO
+        # 🚫 evitar duplicado
         cur.execute("""
         SELECT * FROM agendamentos
         WHERE barbeiro=%s AND data=%s AND horario=%s
@@ -52,40 +52,13 @@ def agendar():
             return jsonify({"erro": "Horário já ocupado"}), 400
 
         cur.execute("""
-        INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
+        INSERT INTO agendamentos (nome, barbeiro, data, horario, telefone, servico, valor)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (nome, barbeiro, data, horario, email, servicos_str, valor))
+        """, (nome, barbeiro, data, horario, telefone, servicos_str, valor))
 
         conn.commit()
         cur.close()
         conn.close()
-
-        # -------- EMAIL CONFIRMAÇÃO --------
-        try:
-            yag = yagmail.SMTP(
-                os.getenv("EMAIL_USER"),
-                os.getenv("EMAIL_PASS")
-            )
-
-            yag.send(
-                to=email,
-                subject="Agendamento confirmado - Yagor's Barber 💈",
-                contents=f"""
-Olá {nome}!
-
-Seu horário foi confirmado.
-
-Barbeiro: {barbeiro}
-Data: {data}
-Horário: {horario}
-Serviços: {servicos_str}
-Valor: R$ {valor}
-
-Obrigado pela preferência!
-"""
-            )
-        except Exception as e:
-            print("ERRO EMAIL:", e)
 
         return jsonify({"mensagem": "Agendado com sucesso"})
 
@@ -234,7 +207,7 @@ def lembretes():
         cur = conn.cursor()
 
         cur.execute("""
-        SELECT nome, email, barbeiro, data, horario
+        SELECT nome, telefone, barbeiro, data, horario
         FROM agendamentos
         """)
 
@@ -243,48 +216,35 @@ def lembretes():
         cur.close()
         conn.close()
 
-        enviados = 0
+        avisos = []
 
         for d in dados:
-            nome, email, barbeiro, data, horario = d
+            nome, telefone, barbeiro, data, horario = d
 
-            try:
-                dataHora = datetime.strptime(f"{data} {horario}", "%Y-%m-%d %H:%M")
+            dataHora = datetime.strptime(f"{data} {horario}", "%Y-%m-%d %H:%M")
 
-                if agora <= dataHora <= daqui_1h:
+            if agora <= dataHora <= daqui_1h:
 
-                    yag = yagmail.SMTP(
-                        os.getenv("EMAIL_USER"),
-                        os.getenv("EMAIL_PASS")
-                    )
+                mensagem = f"""⏰ Lembrete - Barbearia
 
-                    yag.send(
-                        to=email,
-                        subject="⏰ Lembrete de horário - Yagor's Barber",
-                        contents=f"""
 Olá {nome}!
 
 Seu horário é em breve 💈
 
 Barbeiro: {barbeiro}
 Horário: {horario}
-
-Te esperamos!
 """
-                    )
 
-                    enviados += 1
+                link = f"https://wa.me/{telefone}?text={mensagem}"
 
-            except Exception as e:
-                print("Erro lembrete:", e)
+                avisos.append(link)
 
-        return f"Lembretes enviados: {enviados}"
+        return jsonify(avisos)
 
     except Exception as e:
         print("ERRO LEMBRETES:", e)
-        return "Erro", 500
-
-
+        return jsonify([])
+    
 # ---------------- SITE ----------------
 @app.route("/")
 def index():

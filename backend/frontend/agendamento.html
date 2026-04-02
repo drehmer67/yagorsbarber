@@ -29,7 +29,7 @@
 <option>Escolha a data primeiro</option>
 </select>
 
-<input type="email" id="email" placeholder="Seu email">
+<input type="text" id="telefone" placeholder="Seu WhatsApp (ex: 5551999999999)">
 
 <div class="servicos-box">
   <button onclick="toggleServicos()">Escolher serviços</button>
@@ -129,7 +129,7 @@ function confirmar(){
 const nome = document.getElementById("nome").value
 const data = document.getElementById("data").value
 const horario = document.getElementById("horario").value
-const email = document.getElementById("email").value
+const telefone = document.getElementById("telefone").value
 
 const checkboxes = document.querySelectorAll('#listaServicos input:checked')
 
@@ -148,7 +148,7 @@ checkboxes.forEach(cb => {
   if(cb.value === "nevou") total += 130
 })
 
-if(!nome || !data || !horario || !email){
+if(!nome || !data || !horario || !telefone){
   alert("Preencha todos os campos!")
   return
 }
@@ -168,7 +168,7 @@ fetch(`${API}/api/agendar`, {
       barbeiro,
       data,
       horario,
-      email,
+      telefone,
       servicos,
       valor: total
     })
