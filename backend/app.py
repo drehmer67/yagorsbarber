@@ -260,6 +260,52 @@ def arquivos(arquivo):
 def painel():
     return send_from_directory(FRONTEND, "admin.html")
 
+@app.route("/relatorio")
+def relatorio():
+    try:
+        data = request.args.get("data")
+
+        conn = conectar()
+        cur = conn.cursor()
+
+        # 💰 TOTAL DO DIA
+        cur.execute("""
+        SELECT SUM(valor) FROM agendamentos
+        WHERE data=%s
+        """, (data,))
+        total = cur.fetchone()[0] or 0
+
+        # 💈 POR BARBEIRO
+        cur.execute("""
+        SELECT barbeiro, COUNT(*), SUM(valor)
+        FROM agendamentos
+        WHERE data=%s
+        GROUP BY barbeiro
+        """, (data,))
+
+        dados = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        barbeiros = []
+
+        for b in dados:
+            barbeiros.append({
+                "nome": b[0],
+                "quantidade": b[1],
+                "total": b[2] or 0
+            })
+
+        return jsonify({
+            "total_dia": total,
+            "barbeiros": barbeiros
+        })
+
+    except Exception as e:
+        print("ERRO RELATORIO:", e)
+        return jsonify({})
+
 
 # ---------------- RODAR ----------------
 if __name__ == "__main__":

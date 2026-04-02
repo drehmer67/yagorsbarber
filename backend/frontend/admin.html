@@ -36,9 +36,21 @@ if(localStorage.getItem("logado") !== "true"){
 
 </div>
 
+<div class="relatorio">
+
+<h2>💰 Faturamento do Dia</h2>
+
+<input type="date" id="dataRelatorio">
+
+<button onclick="carregarRelatorio()">Ver Relatório</button>
+
+<div id="resultadoRelatorio"></div>
+
+</div>
+
 <!-- LISTA -->
  <h2 id="proximo">Carregando...</h2>
- 
+
 <div id="lista" class="lista"></div>
 
 <!-- BOTÕES -->
