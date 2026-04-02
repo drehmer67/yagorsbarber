@@ -9,7 +9,8 @@ fetch(`${API}/agendamentos`)
 const container = document.getElementById("lista")
 container.innerHTML = ""
 
-const hoje = new Date().toISOString().split("T")[0]
+// 🔔 mostra próximo atendimento
+mostrarProximo(lista)
 
 lista.forEach(a => {
 
@@ -18,7 +19,7 @@ const statusClass = a.status === "finalizado" ? "finalizado" : "pendente"
 const item = document.createElement("div")
 item.className = "card-agendamento " + statusClass
 
-// 📲 mensagem whatsapp
+// 📲 mensagem whatsapp (SEM BUG)
 const mensagem = `Olá ${a.nome}! 💈
 
 Lembrando do seu horário:
@@ -26,9 +27,12 @@ Lembrando do seu horário:
 📅 ${a.data}
 ⏰ ${a.horario}
 
-Barbearia Yagor's Barber`
+Barbearia Yagors Barber`
 
-const telefone = "55" + a.telefone || "5551999999999"
+// 📞 telefone corrigido
+const telefone = a.telefone ? "55" + a.telefone : "5551999999999"
+
+// 🔗 link whatsapp
 const urlWhats = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
 item.innerHTML = `
@@ -42,7 +46,7 @@ item.innerHTML = `
 
 <div class="acoes-card">
 
-<button onclick="window.open('${urlWhats}')">📲 Avisar</button>
+<button onclick="window.open('${urlWhats}', '_blank')">📲 Avisar</button>
 
 <button onclick="finalizar('${a.nome}','${a.data}','${a.horario}')">
 ✅ Finalizar
@@ -54,14 +58,19 @@ item.innerHTML = `
 
 </div>
 `
-mostrarProximo(lista)
+
 container.appendChild(item)
 
 })
 
 })
+.catch(err => {
+console.log("Erro ao carregar agenda:", err)
+})
+
 }
 
+// ✅ FINALIZAR
 function finalizar(nome, data, horario){
 
 fetch(`${API}/finalizar`,{
@@ -73,8 +82,13 @@ body: JSON.stringify({ nome, data, horario })
 alert("Atendimento finalizado!")
 carregarAgenda()
 })
+.catch(err => {
+console.log("Erro ao finalizar:", err)
+})
+
 }
 
+// ❌ CANCELAR
 function cancelar(nome, data, horario){
 
 if(!confirm("Cancelar agendamento?")) return
@@ -88,10 +102,13 @@ body: JSON.stringify({ nome, data, horario })
 alert("Cancelado!")
 carregarAgenda()
 })
+.catch(err => {
+console.log("Erro ao cancelar:", err)
+})
+
 }
 
-window.onload = carregarAgenda
-
+// 🔔 PRÓXIMO ATENDIMENTO
 function mostrarProximo(lista){
 
 const agora = new Date()
@@ -114,4 +131,8 @@ const p = futuros[0]
 
 document.getElementById("proximo").innerText =
 `🔔 Próximo: ${p.nome} às ${p.horario}`
+
 }
+
+// 🚀 INICIAR
+window.onload = carregarAgenda
