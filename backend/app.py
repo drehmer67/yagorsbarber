@@ -3,7 +3,7 @@ from flask_cors import CORS
 import psycopg2
 import os
 import yagmail
-from urllib.parse import urlparse
+from datetime import datetime, timedelta
 
 app = Flask(__name__, static_folder="frontend")
 CORS(app)
@@ -31,18 +31,25 @@ def agendar():
         servicos = dados.get("servicos") or []
         valor = dados.get("valor")
 
-        # 🔥 GARANTIR QUE É LISTA
         if not isinstance(servicos, list):
             servicos = []
 
         servicos_str = ", ".join(servicos)
 
-        # 🔥 VALIDAÇÃO (evita erro 500)
         if not nome or not barbeiro or not data or not horario or not email:
             return jsonify({"erro": "Dados incompletos"}), 400
 
         conn = conectar()
         cur = conn.cursor()
+
+        # 🚫 EVITA HORÁRIO DUPLICADO
+        cur.execute("""
+        SELECT * FROM agendamentos
+        WHERE barbeiro=%s AND data=%s AND horario=%s
+        """, (barbeiro, data, horario))
+
+        if cur.fetchone():
+            return jsonify({"erro": "Horário já ocupado"}), 400
 
         cur.execute("""
         INSERT INTO agendamentos (nome, barbeiro, data, horario, email, servico, valor)
@@ -53,7 +60,7 @@ def agendar():
         cur.close()
         conn.close()
 
-        # -------- EMAIL --------
+        # -------- EMAIL CONFIRMAÇÃO --------
         try:
             yag = yagmail.SMTP(
                 os.getenv("EMAIL_USER"),
@@ -104,9 +111,7 @@ def horarios(barbeiro, data):
         cur.close()
         conn.close()
 
-        horarios = [r[0] for r in resultados]
-
-        return jsonify(horarios)
+        return jsonify([r[0] for r in resultados])
 
     except Exception as e:
         print("ERRO HORARIOS:", e)
@@ -132,7 +137,6 @@ def listar_agendamentos():
         conn.close()
 
         lista = []
-
         for d in dados:
             lista.append({
                 "nome": d[0],
@@ -190,6 +194,97 @@ def login():
         return jsonify({"status": "erro"}), 401
 
 
+# ---------------- FINALIZAR ----------------
+@app.route("/finalizar", methods=["POST"])
+def finalizar():
+    try:
+        dados = request.json
+
+        nome = dados.get("nome")
+        data = dados.get("data")
+        horario = dados.get("horario")
+
+        conn = conectar()
+        cur = conn.cursor()
+
+        cur.execute("""
+        DELETE FROM agendamentos
+        WHERE nome=%s AND data=%s AND horario=%s
+        """, (nome, data, horario))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Finalizado"})
+
+    except Exception as e:
+        print("ERRO FINALIZAR:", e)
+        return jsonify({"erro": "Erro"}), 500
+
+
+# ---------------- LEMBRETES AUTOMÁTICOS ----------------
+@app.route("/lembretes")
+def lembretes():
+    try:
+        agora = datetime.now()
+        daqui_1h = agora + timedelta(hours=1)
+
+        conn = conectar()
+        cur = conn.cursor()
+
+        cur.execute("""
+        SELECT nome, email, barbeiro, data, horario
+        FROM agendamentos
+        """)
+
+        dados = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        enviados = 0
+
+        for d in dados:
+            nome, email, barbeiro, data, horario = d
+
+            try:
+                dataHora = datetime.strptime(f"{data} {horario}", "%Y-%m-%d %H:%M")
+
+                if agora <= dataHora <= daqui_1h:
+
+                    yag = yagmail.SMTP(
+                        os.getenv("EMAIL_USER"),
+                        os.getenv("EMAIL_PASS")
+                    )
+
+                    yag.send(
+                        to=email,
+                        subject="⏰ Lembrete de horário - Yagor's Barber",
+                        contents=f"""
+Olá {nome}!
+
+Seu horário é em breve 💈
+
+Barbeiro: {barbeiro}
+Horário: {horario}
+
+Te esperamos!
+"""
+                    )
+
+                    enviados += 1
+
+            except Exception as e:
+                print("Erro lembrete:", e)
+
+        return f"Lembretes enviados: {enviados}"
+
+    except Exception as e:
+        print("ERRO LEMBRETES:", e)
+        return "Erro", 500
+
+
 # ---------------- SITE ----------------
 @app.route("/")
 def index():
@@ -205,81 +300,6 @@ def arquivos(arquivo):
 def painel():
     return send_from_directory(FRONTEND, "admin.html")
 
-@app.route("/finalizar", methods=["POST"])
-def finalizar():
-    dados = request.json
-
-    nome = dados.get("nome")
-    data = dados.get("data")
-    horario = dados.get("horario")
-
-    conn = conectar()
-    cur = conn.cursor()
-
-    cur.execute("""
-    UPDATE agendamentos
-    SET status='finalizado'
-    WHERE nome=%s AND data=%s AND horario=%s
-    """, (nome, data, horario))
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({"mensagem": "Finalizado"})
-
-from datetime import datetime, timedelta
-
-@app.route("/lembretes")
-def enviar_lembretes():
-
-    agora = datetime.now()
-    daqui_1h = agora + timedelta(hours=1)
-
-    conn = conectar()
-    cur = conn.cursor()
-
-    cur.execute("""
-    SELECT nome, email, barbeiro, data, horario
-    FROM agendamentos
-    WHERE status='pendente'
-    """)
-
-    dados = cur.fetchall()
-    conn.close()
-
-    for d in dados:
-        nome, email, barbeiro, data, horario = d
-
-        dataHora = datetime.strptime(f"{data} {horario}", "%Y-%m-%d %H:%M")
-
-        # ⏰ se falta 1 hora
-        if agora <= dataHora <= daqui_1h:
-
-            try:
-                yag = yagmail.SMTP(
-                    os.getenv("EMAIL_USER"),
-                    os.getenv("EMAIL_PASS")
-                )
-
-                yag.send(
-                    to=email,
-                    subject="⏰ Lembrete de horário - Yagor's Barber",
-                    contents=f"""
-Olá {nome}!
-
-Seu horário é em breve 💈
-
-Barbeiro: {barbeiro}
-Horário: {horario}
-
-Não se atrase 😄
-"""
-                )
-
-            except Exception as e:
-                print("Erro lembrete:", e)
-
-    return "ok"
 
 # ---------------- RODAR ----------------
 if __name__ == "__main__":
