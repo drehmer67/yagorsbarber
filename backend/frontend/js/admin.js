@@ -1,4 +1,7 @@
 const API = window.location.origin
+function abrirWhats(url){
+  window.open(url, "_blank")
+}
 
 // 🔥 COLOCA AQUI
 function formatarTelefone(num){
@@ -66,7 +69,7 @@ item.innerHTML = `
 
 <div class="acoes-card">
 
-<button onclick="window.open('${urlWhats}', '_blank')">📲 Avisar</button>
+<button onclick="abrirWhats('${urlWhats}')">📲 Avisar</button>
 
 <button onclick="finalizar('${a.nome}','${a.data}','${a.horario}')">
 ✅ Finalizar
