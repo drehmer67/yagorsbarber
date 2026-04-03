@@ -1,5 +1,27 @@
 const API = window.location.origin
 
+// 🔥 COLOCA AQUI
+function formatarTelefone(num){
+
+if(!num) return "5551999999999"
+
+// remove tudo que não é número
+num = num.replace(/\D/g, "")
+
+// se já tem 55 no começo, usa
+if(num.startsWith("55")){
+  return num
+}
+
+// se começa com 0 (ex: 051...)
+if(num.startsWith("0")){
+  num = num.substring(1)
+}
+
+// adiciona 55
+return "55" + num
+}
+
 function carregarAgenda(){
 
 fetch(`${API}/agendamentos`)
@@ -30,7 +52,7 @@ Lembrando do seu horário:
 Barbearia Yagors Barber`
 
 // 📞 telefone corrigido
-const telefone = a.telefone ? "55" + a.telefone : "5551999999999"
+const telefone = formatarTelefone(a.telefone)
 
 // 🔗 link whatsapp
 const urlWhats = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
