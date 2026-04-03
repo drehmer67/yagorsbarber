@@ -42,14 +42,12 @@ const item = document.createElement("div")
 item.className = "card-agendamento " + statusClass
 
 // 📲 mensagem whatsapp (SEM BUG)
-const mensagem = `Olá ${a.nome}! 💈
-
-Lembrando do seu horário:
-
-📅 ${a.data}
-⏰ ${a.horario}
-
-Barbearia Yagors Barber`
+const mensagem = 
+`Olá ${a.nome}! 💈\n\n` +
+`Lembrando do seu horário:\n\n` +
+`📅 ${a.data}\n` +
+`⏰ ${a.horario}\n\n` +
+`Barbearia Yagor's Barber`
 
 // 📞 telefone corrigido
 const telefone = formatarTelefone(a.telefone)
