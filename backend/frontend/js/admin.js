@@ -46,6 +46,8 @@ const mensagem =
 `⏰ ${a.horario}\n\n` +
 `Barbearia Yagors Barber`
 
+console.log("Telefone:", a.telefone)
+
 const telefone = formatarTelefone(a.telefone)
 const urlWhats = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
