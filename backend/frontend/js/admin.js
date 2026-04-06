@@ -150,3 +150,36 @@ document.getElementById("proximo").innerText =
 
 // 🚀 INICIAR
 window.onload = carregarAgenda
+
+function carregarRelatorio(){
+
+const data = document.getElementById("dataRelatorio").value
+
+if(!data){
+  alert("Escolha uma data")
+  return
+}
+
+fetch(${API}/relatorio?data=${data})
+.then(res => res.json())
+.then(dados => {
+
+let html = <h3>Total do dia: R$ ${dados.total_dia || 0}</h3>
+
+dados.barbeiros.forEach(b => {
+  html += `
+  <div class="card-relatorio">
+    <p><strong>${b.nome}</strong></p>
+    <p>Cortes: ${b.quantidade}</p>
+    <p>Faturamento: R$ ${b.total}</p>
+  </div>
+  `
+})
+
+document.getElementById("resultadoRelatorio").innerHTML = html
+
+})
+.catch(err => {
+console.log("Erro relatório:", err)
+})
+}

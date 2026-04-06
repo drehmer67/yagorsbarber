@@ -99,7 +99,7 @@ def listar_agendamentos():
         cur = conn.cursor()
 
         cur.execute("""
-        SELECT nome, barbeiro, data, horario, valor
+        SELECT nome, barbeiro, data, horario, valor, telefone
         FROM agendamentos
         ORDER BY data, horario
         """)
@@ -117,6 +117,7 @@ def listar_agendamentos():
                 "data": d[2],
                 "horario": d[3],
                 "valor": d[4]
+                "telefone": d[5]
             })
 
         return jsonify(lista)
