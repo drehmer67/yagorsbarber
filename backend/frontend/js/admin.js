@@ -38,7 +38,7 @@ const statusClass = a.status === "finalizado" ? "finalizado" : "pendente"
 const item = document.createElement("div")
 item.className = "card-agendamento " + statusClass
 
-// ✅ mensagem SEM quebra
+// 📲 mensagem
 const mensagem = 
 `Olá ${a.nome}! 💈\n\n` +
 `Lembrando do seu horário:\n\n` +
@@ -46,12 +46,10 @@ const mensagem =
 `⏰ ${a.horario}\n\n` +
 `Barbearia Yagors Barber`
 
-console.log("Telefone:", a.telefone)
-
 const telefone = formatarTelefone(a.telefone)
 const urlWhats = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`
 
-// 🔥 NÃO USA onclick string mais
+// botões
 const btnAvisar = document.createElement("button")
 btnAvisar.innerText = "📲 Avisar"
 btnAvisar.onclick = () => abrirWhats(urlWhats)
@@ -74,7 +72,6 @@ item.innerHTML = `
 <p>📌 ${a.status || "pendente"}</p>
 `
 
-// container de botões
 const acoes = document.createElement("div")
 acoes.className = "acoes-card"
 
@@ -83,7 +80,6 @@ acoes.appendChild(btnFinalizar)
 acoes.appendChild(btnCancelar)
 
 item.appendChild(acoes)
-
 container.appendChild(item)
 
 })
@@ -106,6 +102,7 @@ body: JSON.stringify({ nome, data, horario })
 alert("Atendimento finalizado!")
 carregarAgenda()
 })
+.catch(err => console.log(err))
 }
 
 // ❌ CANCELAR
@@ -121,6 +118,7 @@ body: JSON.stringify({ nome, data, horario })
 alert("Cancelado!")
 carregarAgenda()
 })
+.catch(err => console.log(err))
 }
 
 // 🔔 PRÓXIMO
@@ -146,11 +144,10 @@ const p = futuros[0]
 
 document.getElementById("proximo").innerText =
 `🔔 Próximo: ${p.nome} às ${p.horario}`
+
 }
 
-// 🚀 INICIAR
-window.onload = carregarAgenda
-
+// 📊 RELATÓRIO
 function carregarRelatorio(){
 
 const data = document.getElementById("dataRelatorio").value
@@ -160,11 +157,11 @@ if(!data){
   return
 }
 
-fetch(${API}/relatorio?data=${data})
+fetch(`${API}/relatorio?data=${data}`)
 .then(res => res.json())
 .then(dados => {
 
-let html = <h3>Total do dia: R$ ${dados.total_dia || 0}</h3>
+let html = `<h3>Total do dia: R$ ${dados.total_dia || 0}</h3>`
 
 dados.barbeiros.forEach(b => {
   html += `
@@ -182,4 +179,8 @@ document.getElementById("resultadoRelatorio").innerHTML = html
 .catch(err => {
 console.log("Erro relatório:", err)
 })
+
 }
+
+// 🚀 INICIAR
+window.onload = carregarAgenda
