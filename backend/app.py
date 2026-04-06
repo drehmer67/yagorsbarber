@@ -29,7 +29,7 @@ def agendar():
         horario = dados.get("horario")
         telefone = dados.get("telefone")
         servicos = dados.get("servicos") or []
-        valor = dados.get("valor")
+        valor = dados.get("valor") or 0
 
         if not isinstance(servicos, list):
             servicos = []
@@ -270,7 +270,8 @@ def relatorio():
 
         # 💰 TOTAL DO DIA
         cur.execute("""
-        SELECT SUM(valor) FROM agendamentos
+        SELECT SUM(valor)
+        FROM agendamentos
         WHERE data=%s
         """, (data,))
         total = cur.fetchone()[0] or 0
@@ -304,7 +305,7 @@ def relatorio():
 
     except Exception as e:
         print("ERRO RELATORIO:", e)
-        return jsonify({})
+        return jsonify({"erro": "Erro no relatorio"}),500
 
 
 # ---------------- RODAR ----------------
